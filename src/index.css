@@ -1,0 +1,59 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+.l-container {
+    width: 92%;
+    margin: 0 4%;
+}
+
+.page-header {
+    background-color: #eee;
+    box-shadow: 0 0 0.5rem 0.2rem #aaa;
+    padding: 2rem 0;
+}
+
+.page-header__inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.calendar-grid {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    height: 70vh;
+    margin: 2rem 0;
+}
+
+.calendar-item {
+    outline: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.9em;
+}
+
+.calendar-item:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.calendar-item__inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0.7em;
+}
+
+.calendar-grid .calendar-item {
+    width: 14.28%;
+    max-height: 20%;
+}
