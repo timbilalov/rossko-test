@@ -10,17 +10,27 @@ export default class CalendarGrid extends React.Component {
 
     render() {
         let items = [];
-        const firstMonthDay = moment().month(moment().month()).date(1);
-        const firstCalendarViewDay = firstMonthDay.subtract(firstMonthDay.day(), "days");
+        const viewMonth = this.props.month || moment().month();
+        const firstMonthDay = moment().month(viewMonth).startOf("month");
+        const lastMonthDay = moment().month(viewMonth).endOf("month");
+        const firstMonthDayWeekDay = firstMonthDay.day() || 7;
+        const firstCalendarViewDay = moment(firstMonthDay).date(- firstMonthDayWeekDay + 1);
 
-        for (let i = 0; i < 35; i++) {
+        let itemsCount = moment(firstMonthDay).daysInMonth();
+        itemsCount += (firstMonthDayWeekDay - 1);
+        itemsCount += (7 - (lastMonthDay.day() || 7));
+        const classNameModifierGrid = itemsCount === 35 ? "" : "calendar-grid--long";
+
+        for (let i = 0; i < itemsCount; i++) {
             let date = firstCalendarViewDay.add(1, "days");
-            date = date.format("DD MMMM");
-            items.push(<CalendarItem key={ i } date={ date } />);
+            let classNameModifierItem = date.month() === firstMonthDay.month() ? "" : "calendar-item--option";
+            const format = i < 7 ? "dddd, D" : "D";
+            date = date.format(format);
+            items.push(<CalendarItem classNameModifier={ classNameModifierItem } key={ i } date={ date } />);
         }
 
         return (
-            <div className="calendar-grid">
+            <div className={ "calendar-grid " + classNameModifierGrid }>
                 { items }
             </div>
         );

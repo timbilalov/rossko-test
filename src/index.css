@@ -37,6 +37,10 @@ body, html {
     font-size: 0.9em;
 }
 
+.calendar-item--option {
+    color: #ccc;
+}
+
 .calendar-item:before {
     content: "";
     display: block;
@@ -56,4 +60,8 @@ body, html {
 .calendar-grid .calendar-item {
     width: 14.28%;
     max-height: 20%;
+}
+
+.calendar-grid--long .calendar-item {
+    max-height: 16.66%;
 }
