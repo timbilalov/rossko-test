@@ -17,6 +17,7 @@ export default class CalendarItem extends React.Component {
         const classNameModifier = this.props.classNameModifier || "";
         const event = this.props.event || {};
         const eventName = event.name || "";
+        const eventDescription = event.description || "";
         return (
             <div className={ "calendar-item " + classNameModifier } data-date={ this.props.date } onClick={ (e) => this.handleClick(e) }>
                 <div className="calendar-item__inner">
@@ -25,7 +26,8 @@ export default class CalendarItem extends React.Component {
                     </div>
 
                     <div className="calendar-item__text">
-                        { eventName }
+                        <h2 className="calendar-item__title">{ eventName }</h2>
+                        <p className="calendar-item__description">{ eventDescription }</p>
                     </div>
                 </div>
             </div>

@@ -98,3 +98,37 @@ body, html {
     left: 100%;
     top: 0;
 }
+
+.calendar-item__date {
+    margin-bottom: 0.4em;
+}
+
+.calendar-item__title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.calendar-item__description {
+    margin: 0;
+}
+
+.event-popup__date {
+    margin: 0 0 1rem;
+    color: #666;
+    font-size: 0.8em;
+}
+
+.event-popup__name {
+    font-weight: bold;
+    margin: 0 0 0.4em;
+    font-size: 1.2em;
+}
+
+.event-popup__description {
+    margin: 0;
+}
+
+.event-popup__text {
+    margin-bottom: 1.5rem;
+}

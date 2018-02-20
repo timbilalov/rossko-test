@@ -20,6 +20,8 @@ class App extends React.Component {
             event: {
                 name: "",
                 date: "",
+                selectedDate: "",
+                description: "",
                 isNew: true,
                 isOnEdit: false
             },
@@ -70,6 +72,8 @@ class App extends React.Component {
         if (selectedDayEvent.length > 0) {
             selectedDayEvent = selectedDayEvent[0];
             event.name = selectedDayEvent.name;
+            event.description = selectedDayEvent.description;
+            event.selectedDate = date;
             event.isNew = false;
         } else {
             event.isNew = true;
@@ -92,6 +96,10 @@ class App extends React.Component {
                 event.name = value;
                 break;
 
+            case "description":
+                event.description = value;
+                break;
+
             default:
                 break;
         }
@@ -107,19 +115,23 @@ class App extends React.Component {
         const events = this.state.events.slice();
         const evName = props.name || this.state.event.name;
         const evDate = props.date || this.state.event.date;
+        const evDescription = props.description || this.state.event.description;
+        const selectedDate = this.state.event.selectedDate;
         switch (type) {
             case "add":
                 const newEvent = {
                     name: evName,
-                    date: evDate
+                    date: evDate,
+                    description: evDescription
                 };
                 events.push(newEvent);
                 break;
 
             case "edit":
                 events.map(function(elem) {
-                    if (elem.date === evDate) {
+                    if (elem.date === selectedDate) {
                         elem.name = evName;
+                        elem.date = evDate;
                     }
                 });
                 break;
@@ -148,6 +160,8 @@ class App extends React.Component {
             event: {
                 name: "",
                 date: "",
+                selectedDate: "",
+                description: "",
                 isNew: true,
                 isOnEdit: false
             }
@@ -168,6 +182,8 @@ class App extends React.Component {
             event.isNew = true;
             event.isOnEdit = false;
             event.name = "";
+            event.date = "";
+            event.selectedDate = "";
             this.setState({
                 event: event
             });
@@ -204,9 +220,10 @@ class App extends React.Component {
                 <div className="event-popup">
                     {
                         (!this.state.event.isNew && !this.state.event.isOnEdit) &&
-                        <div>
-                            <p>{ this.state.event.name }</p>
-                            <p>{ this.state.event.date }</p>
+                        <div className="event-popup__text">
+                            <p className="event-popup__date">{ this.state.event.date }</p>
+                            <p className="event-popup__name">{ this.state.event.name }</p>
+                            <p className="event-popup__description">{ this.state.event.description }</p>
                         </div>
                     }
                     {
@@ -214,8 +231,7 @@ class App extends React.Component {
                         <div>
                             <input type="text" placeholder="Событие" value={ this.state.event.name } onChange={ (e, type) => this.handleChange(e, "name") } />
                             <input type="text" placeholder="День, месяц, год" value={ this.state.event.date } onChange={ (e, type) => this.handleChange(e, "date") } />
-                            <input type="text" placeholder="Имена участников" />
-                            <textarea placeholder="Описание"></textarea>
+                            <textarea placeholder="Описание" value={ this.state.event.description } onChange={ (e, type) => this.handleChange(e, "description") }></textarea>
                         </div>
                     }
                     {
