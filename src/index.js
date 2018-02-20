@@ -14,35 +14,38 @@ class App extends React.Component {
                 month: moment().month(),
                 day: moment().date()
             },
-            view: {}
+            view: {
+                month: moment().month()
+            }
         }
     }
 
-    setViewMonth(month) {
-        const view = this.state.view || {};
+    setMonth(month) {
+        const view = this.state.view;
+        const current = this.state.current;
+
+        switch (month) {
+            case "prev":
+                month = view.month - 1;
+                break;
+
+            case "next":
+                month = view.month + 1;
+                break;
+
+            case "cur":
+                month = current.month;
+                break;
+
+            default:
+                break;
+        }
+
+        if (typeof month !== "number") {
+            return;
+        }
+
         view.month = month;
-        this.setState({
-            view: view
-        })
-    }
-
-    setPrevMonth() {
-        const view = this.state.view;
-        if (!view) {
-            return;
-        }
-        view.month = view.month - 1;
-        this.setState({
-            view: view
-        })
-    }
-
-    setNextMonth() {
-        const view = this.state.view;
-        if (!view) {
-            return;
-        }
-        view.month = view.month + 1;
         this.setState({
             view: view
         })
@@ -51,22 +54,24 @@ class App extends React.Component {
     render() {
         console.log("this.state.view.month: " + this.state.view.month);
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
+        const currentDate = moment().format("YYYY.MM.DD");
+
         return (
             <div>
                 <PageHeader />
 
                 <div className="l-container">
-                    <button onClick={ () => this.setPrevMonth() }>-</button>
-                    <span>{ viewDate }</span>
-                    <button onClick={ () => this.setNextMonth() }>+</button>
-                    <CalendarGrid month={ this.state.view.month } />
+                    <div className="date-controls">
+                        <button onClick={ () => this.setMonth("prev") }>-</button>
+                        <span>{ viewDate }</span>
+                        <button onClick={ () => this.setMonth("next") }>+</button>
+                        <button onClick={ () => this.setMonth("cur") }>Сегодня</button>
+                    </div>
+
+                    <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } />
                 </div>
             </div>
         )
-    }
-
-    componentWillMount() {
-        this.setViewMonth(this.state.current.month);
     }
 }
 

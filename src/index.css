@@ -41,6 +41,10 @@ body, html {
     color: #ccc;
 }
 
+.calendar-item--current {
+    background-color: #d5f2ff;
+}
+
 .calendar-item:before {
     content: "";
     display: block;
@@ -64,4 +68,8 @@ body, html {
 
 .calendar-grid--long .calendar-item {
     max-height: 16.66%;
+}
+
+.date-controls {
+    margin: 2rem 0;
 }

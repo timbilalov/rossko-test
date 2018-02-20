@@ -24,6 +24,10 @@ export default class CalendarGrid extends React.Component {
         for (let i = 0; i < itemsCount; i++) {
             let date = firstCalendarViewDay.add(1, "days");
             let classNameModifierItem = date.month() === firstMonthDay.month() ? "" : "calendar-item--option";
+            console.log("(date == moment()): " + (date.format("YYYY.MM.DD") == moment().format("YYYY.MM.DD")));
+            if (date.format("YYYY.MM.DD") == moment().format("YYYY.MM.DD")) {
+                classNameModifierItem += " calendar-item--current";
+            }
             const format = i < 7 ? "dddd, D" : "D";
             date = date.format(format);
             items.push(<CalendarItem classNameModifier={ classNameModifierItem } key={ i } date={ date } />);
