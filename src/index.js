@@ -16,6 +16,8 @@ class App extends React.Component {
             },
             view: {
                 month: moment().month()
+            },
+            event: {
             }
         }
     }
@@ -51,6 +53,19 @@ class App extends React.Component {
         })
     }
 
+    handleClick(date) {
+        console.log(date);
+        const popup = document.querySelector(".event-popup");
+        popup.style.display = "block";
+        const gridItem = document.querySelector(".calendar-item[data-date='" + date + "']");
+        console.log(gridItem);
+        gridItem.appendChild(popup);
+        // const event = this.state.event;
+        // this.setState({
+        //     event: event
+        // })
+    }
+
     render() {
         console.log("this.state.view.month: " + this.state.view.month);
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
@@ -68,7 +83,14 @@ class App extends React.Component {
                         <button onClick={ () => this.setMonth("cur") }>Сегодня</button>
                     </div>
 
-                    <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } />
+                    <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } onClick={ (date) => this.handleClick(date) } />
+
+                    <div className="event-popup">
+                        <input type="text" placeholder="Событие" />
+                        <input type="date" placeholder="День, месяц, год" />
+                        <input type="text" placeholder="Имена участников" />
+                        <textarea placeholder="Описание"></textarea>
+                    </div>
                 </div>
             </div>
         )

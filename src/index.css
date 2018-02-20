@@ -33,7 +33,6 @@ body, html {
 .calendar-item {
     outline: 1px solid #ccc;
     position: relative;
-    overflow: hidden;
     font-size: 0.9em;
 }
 
@@ -72,4 +71,26 @@ body, html {
 
 .date-controls {
     margin: 2rem 0;
+}
+
+.event-popup {
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    border: 1px solid black;
+    padding: 1rem;
+    width: 15rem;
+    z-index: 1;
+}
+
+.event-popup input,
+.event-popup textarea {
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.calendar-item .event-popup {
+    left: 100%;
+    top: 0;
 }
