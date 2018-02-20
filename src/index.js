@@ -20,7 +20,8 @@ class App extends React.Component {
             event: {
                 name: "",
                 date: "",
-                isNew: true
+                isNew: true,
+                isOnEdit: false
             },
             events: []
         };
@@ -147,7 +148,8 @@ class App extends React.Component {
             event: {
                 name: "",
                 date: "",
-                isNew: true
+                isNew: true,
+                isOnEdit: false
             }
         });
 
@@ -164,11 +166,20 @@ class App extends React.Component {
         const event = this.state.event;
         if (!event.isNew) {
             event.isNew = true;
+            event.isOnEdit = false;
             event.name = "";
             this.setState({
                 event: event
             });
         }
+    }
+
+    setEditState() {
+        const event = this.state.event;
+        event.isOnEdit = true;
+        this.setState({
+            event: event
+        });
     }
 
     render() {
@@ -191,16 +202,32 @@ class App extends React.Component {
                 </div>
 
                 <div className="event-popup">
-                    <input type="text" placeholder="Событие" value={ this.state.event.name } onChange={ (e, type) => this.handleChange(e, "name") } />
-                    <input type="text" placeholder="День, месяц, год" value={ this.state.event.date } onChange={ (e, type) => this.handleChange(e, "date") } />
-                    <input type="text" placeholder="Имена участников" />
-                    <textarea placeholder="Описание"></textarea>
+                    {
+                        (!this.state.event.isNew && !this.state.event.isOnEdit) &&
+                        <div>
+                            <p>{ this.state.event.name }</p>
+                            <p>{ this.state.event.date }</p>
+                        </div>
+                    }
+                    {
+                        (this.state.event.isNew || this.state.event.isOnEdit) &&
+                        <div>
+                            <input type="text" placeholder="Событие" value={ this.state.event.name } onChange={ (e, type) => this.handleChange(e, "name") } />
+                            <input type="text" placeholder="День, месяц, год" value={ this.state.event.date } onChange={ (e, type) => this.handleChange(e, "date") } />
+                            <input type="text" placeholder="Имена участников" />
+                            <textarea placeholder="Описание"></textarea>
+                        </div>
+                    }
                     {
                         this.state.event.isNew &&
                         <button onClick={ (type, props) => this.eventAction("add", this.state.event) }>Добавить</button>
                     }
                     {
-                        !this.state.event.isNew &&
+                        (!this.state.event.isNew && !this.state.event.isOnEdit) &&
+                        <button onClick={ () => this.setEditState() }>Редактировать</button>
+                    }
+                    {
+                        (!this.state.event.isNew && this.state.event.isOnEdit) &&
                         <button onClick={ (type, props) => this.eventAction("edit", this.state.event) }>Сохранить</button>
                     }
                     {
