@@ -62,11 +62,15 @@ body, html {
 
 .calendar-grid .calendar-item {
     width: 14.28%;
-    max-height: 20%;
+    height: 20%;
+}
+
+.calendar-grid .calendar-item:before {
+    display: none;
 }
 
 .calendar-grid--long .calendar-item {
-    max-height: 16.66%;
+    height: 16.66%;
 }
 
 .date-controls {

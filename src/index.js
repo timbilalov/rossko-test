@@ -18,8 +18,12 @@ class App extends React.Component {
                 month: moment().month()
             },
             event: {
-            }
-        }
+                name: "",
+                date: "",
+                isNew: true
+            },
+            events: []
+        };
     }
 
     setMonth(month) {
@@ -54,20 +58,120 @@ class App extends React.Component {
     }
 
     handleClick(date) {
-        console.log(date);
+        this.closeEventPopup();
+
         const popup = document.querySelector(".event-popup");
         popup.style.display = "block";
         const gridItem = document.querySelector(".calendar-item[data-date='" + date + "']");
-        console.log(gridItem);
         gridItem.appendChild(popup);
-        // const event = this.state.event;
-        // this.setState({
-        //     event: event
-        // })
+        let selectedDayEvent = this.state.events.filter((elem) => elem.date === date);
+        const event = this.state.event;
+        if (selectedDayEvent.length > 0) {
+            selectedDayEvent = selectedDayEvent[0];
+            event.name = selectedDayEvent.name;
+            event.isNew = false;
+        } else {
+            event.isNew = true;
+        }
+        event.date = date;
+        this.setState({
+            event: event
+        })
+    }
+
+    handleChange(e, type) {
+        const event = this.state.event;
+        const value = e.target.value || "";
+        switch (type) {
+            case "date":
+                event.date = value;
+                break;
+
+            case "name":
+                event.name = value;
+                break;
+
+            default:
+                break;
+        }
+
+        this.setState({
+            event: event
+        });
+    }
+
+    eventAction(type, props) {
+        props = props || {};
+
+        const events = this.state.events.slice();
+        const evName = props.name || this.state.event.name;
+        const evDate = props.date || this.state.event.date;
+        switch (type) {
+            case "add":
+                const newEvent = {
+                    name: evName,
+                    date: evDate
+                };
+                events.push(newEvent);
+                break;
+
+            case "edit":
+                events.map(function(elem) {
+                    if (elem.date === evDate) {
+                        elem.name = evName;
+                    }
+                });
+                break;
+
+            case "delete":
+                events.map(function(elem) {
+                    if (elem.date === evDate) {
+                        elem.name = evName;
+                    }
+                });
+                let event = events.filter((elem) => elem.date === evDate);
+                if (event.length <= 0) {
+                    return;
+                }
+                event = event[0];
+                const index = events.indexOf(event);
+                events.splice(index, 1);
+                break;
+
+            default:
+                break;
+        }
+
+        this.setState({
+            events: events,
+            event: {
+                name: "",
+                date: "",
+                isNew: true
+            }
+        });
+
+        if (localStorage) {
+            localStorage.setItem("events", JSON.stringify(events));
+        }
+
+        this.closeEventPopup();
+    }
+
+    closeEventPopup() {
+        const popup = document.querySelector(".event-popup");
+        popup.style.display = "none";
+        const event = this.state.event;
+        if (!event.isNew) {
+            event.isNew = true;
+            event.name = "";
+            this.setState({
+                event: event
+            });
+        }
     }
 
     render() {
-        console.log("this.state.view.month: " + this.state.view.month);
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
         const currentDate = moment().format("YYYY.MM.DD");
 
@@ -83,17 +187,38 @@ class App extends React.Component {
                         <button onClick={ () => this.setMonth("cur") }>Сегодня</button>
                     </div>
 
-                    <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } onClick={ (date) => this.handleClick(date) } />
+                    <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } onClick={ (date) => this.handleClick(date) } events={ this.state.events } />
+                </div>
 
-                    <div className="event-popup">
-                        <input type="text" placeholder="Событие" />
-                        <input type="date" placeholder="День, месяц, год" />
-                        <input type="text" placeholder="Имена участников" />
-                        <textarea placeholder="Описание"></textarea>
-                    </div>
+                <div className="event-popup">
+                    <input type="text" placeholder="Событие" value={ this.state.event.name } onChange={ (e, type) => this.handleChange(e, "name") } />
+                    <input type="text" placeholder="День, месяц, год" value={ this.state.event.date } onChange={ (e, type) => this.handleChange(e, "date") } />
+                    <input type="text" placeholder="Имена участников" />
+                    <textarea placeholder="Описание"></textarea>
+                    {
+                        this.state.event.isNew &&
+                        <button onClick={ (type, props) => this.eventAction("add", this.state.event) }>Добавить</button>
+                    }
+                    {
+                        !this.state.event.isNew &&
+                        <button onClick={ (type, props) => this.eventAction("edit", this.state.event) }>Сохранить</button>
+                    }
+                    {
+                        !this.state.event.isNew &&
+                        <button onClick={ (type, props) => this.eventAction("delete", this.state.event) }>Удалить</button>
+                    }
+                    <button onClick={ () => this.closeEventPopup() }>Отмена</button>
                 </div>
             </div>
         )
+    }
+
+    componentWillMount() {
+        if (localStorage && localStorage.getItem("events")) {
+            this.setState({
+                events: JSON.parse(localStorage.getItem("events"))
+            });
+        }
     }
 }
 
