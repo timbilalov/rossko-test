@@ -25,7 +25,9 @@ class App extends React.Component {
                 isNew: true,
                 isOnEdit: false
             },
-            events: []
+            events: [],
+            searchValue: "",
+            searchResult: []
         };
     }
 
@@ -63,7 +65,7 @@ class App extends React.Component {
     handleClick(date) {
         this.closeEventPopup();
 
-        const popup = document.querySelector(".event-popup");
+        const popup = document.querySelector("#event-popup");
         popup.style.display = "block";
         const gridItem = document.querySelector(".calendar-item[data-date='" + date + "']");
         gridItem.appendChild(popup);
@@ -165,7 +167,7 @@ class App extends React.Component {
                 isNew: true,
                 isOnEdit: false
             }
-        });
+        }, this.updateSearchResults);
 
         if (localStorage) {
             localStorage.setItem("events", JSON.stringify(events));
@@ -175,7 +177,7 @@ class App extends React.Component {
     }
 
     closeEventPopup() {
-        const popup = document.querySelector(".event-popup");
+        const popup = document.querySelector("#event-popup");
         popup.style.display = "none";
         const event = this.state.event;
         if (!event.isNew) {
@@ -198,13 +200,36 @@ class App extends React.Component {
         });
     }
 
+    handleSearchChange(e) {
+        const value = e.target.value;
+
+        this.setState({
+            searchValue: value
+        }, this.updateSearchResults);
+    }
+
+    updateSearchResults() {
+        const value = this.state.searchValue || "";
+        const regexp = new RegExp(value, "i");
+        const events = this.state.events.slice();
+        const foundEvents = events.filter(function(elem) {
+            const str = "" + elem.name + " " + elem.date + " " + elem.description;
+            const res = regexp.test(str);
+            return res;
+        });
+
+        this.setState({
+            searchResult: foundEvents
+        });
+    }
+
     render() {
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
         const currentDate = moment().format("YYYY.MM.DD");
 
         return (
             <div>
-                <PageHeader />
+                <PageHeader searchResult={ this.state.searchResult } searchValue={ this.state.searchValue } onSearchChange={ (e) => this.handleSearchChange(e) } />
 
                 <div className="l-container">
                     <div className="date-controls">
@@ -217,7 +242,7 @@ class App extends React.Component {
                     <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } onClick={ (date) => this.handleClick(date) } events={ this.state.events } />
                 </div>
 
-                <div className="event-popup">
+                <div className="event-popup" id="event-popup">
                     {
                         (!this.state.event.isNew && !this.state.event.isOnEdit) &&
                         <div className="event-popup__text">
