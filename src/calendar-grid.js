@@ -10,7 +10,7 @@ export default class CalendarGrid extends React.Component {
 
     render() {
         let items = [];
-        const viewMonth = this.props.month || moment().month();
+        const viewMonth = typeof this.props.month === "number" ? this.props.month : moment().month();
         const firstMonthDay = moment().month(viewMonth).startOf("month");
         const lastMonthDay = moment().month(viewMonth).endOf("month");
         const firstMonthDayWeekDay = firstMonthDay.day() || 7;

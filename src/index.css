@@ -44,6 +44,10 @@ body, html {
     background-color: #d5f2ff;
 }
 
+.calendar-item--selected {
+    background-color: #72b0cc;
+}
+
 .calendar-item:before {
     content: "";
     display: block;

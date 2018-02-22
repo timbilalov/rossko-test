@@ -223,13 +223,22 @@ class App extends React.Component {
         });
     }
 
+    handleSearchResClick(date) {
+        const monthsDiff = Math.round(moment(date).date(1).diff(moment().date(1), "months", true));
+        this.setMonth(this.state.current.month + monthsDiff);
+
+        setTimeout(function() {
+            document.querySelector(".calendar-item[data-date='" + date + "'").click();
+        }, 100);
+    }
+
     render() {
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
         const currentDate = moment().format("YYYY.MM.DD");
 
         return (
             <div>
-                <PageHeader searchResult={ this.state.searchResult } searchValue={ this.state.searchValue } onSearchChange={ (e) => this.handleSearchChange(e) } />
+                <PageHeader searchResult={ this.state.searchResult } searchValue={ this.state.searchValue } onSearchChange={ (e) => this.handleSearchChange(e) } onSearchResClick={ (date) => this.handleSearchResClick(date) } />
 
                 <div className="l-container">
                     <div className="date-controls">
@@ -287,6 +296,23 @@ class App extends React.Component {
                 events: JSON.parse(localStorage.getItem("events"))
             });
         }
+    }
+
+    componentDidUpdate() {
+        const date = this.state.event.date;
+        const gridItem = document.querySelector(".calendar-item[data-date='" + date + "']");
+        const allGridItems = document.querySelectorAll(".calendar-item");
+        const selectedClass = "calendar-item--selected";
+
+        Array.prototype.forEach.call(allGridItems, function(elem) {
+            elem.classList.remove(selectedClass);
+        });
+
+        if (!date || !gridItem) {
+            return;
+        }
+
+        gridItem.classList.add(selectedClass);
     }
 }
 

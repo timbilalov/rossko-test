@@ -1,6 +1,10 @@
 import React from "react";
 
 export default class PageHeader extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     showSearchResults() {
         const resultsBlock = document.getElementById("search-results");
         if (!resultsBlock) {
@@ -17,10 +21,15 @@ export default class PageHeader extends React.Component {
         resultsBlock.style.display = "none";
     }
 
+    handleBlur() {
+        setTimeout(this.hideSearchResults, 200);
+    }
+
     render() {
+        const context = this;
         const searchResult = (this.props.searchResult || []).map(function(elem) {
             return (
-                <div className="page-header__s-res-item" key={ elem.date }>
+                <div className="page-header__s-res-item" key={ elem.date } onClick={ (date) => context.props.onSearchResClick(elem.date) }>
                     <div className="page-header__s-res-name">{ elem.name }</div>
                     <div className="page-header__s-res-date">{ elem.date }</div>
                 </div>
@@ -59,6 +68,6 @@ export default class PageHeader extends React.Component {
     componentDidMount() {
         const searchInput = document.getElementById("search-input");
         searchInput.addEventListener("focus", this.showSearchResults);
-        searchInput.addEventListener("blur", this.hideSearchResults);
+        searchInput.addEventListener("blur", () => this.handleBlur());
     }
 }
