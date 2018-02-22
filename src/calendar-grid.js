@@ -4,10 +4,6 @@ import moment from 'moment';
 import 'moment/locale/ru';
 
 export default class CalendarGrid extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         let items = [];
         const viewMonth = typeof this.props.month === "number" ? this.props.month : moment().month();
@@ -25,7 +21,7 @@ export default class CalendarGrid extends React.Component {
         for (let i = 0; i < itemsCount; i++) {
             let date = firstCalendarViewDay.add(1, "days");
             let classNameModifierItem = date.month() === firstMonthDay.month() ? "" : "calendar-item--option";
-            if (date.format("YYYY.MM.DD") == moment().format("YYYY.MM.DD")) {
+            if (date.format("YYYY.MM.DD") === moment().format("YYYY.MM.DD")) {
                 classNameModifierItem += " calendar-item--current";
             }
             const format = i < 7 ? "dddd, D" : "D";

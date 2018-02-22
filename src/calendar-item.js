@@ -3,10 +3,6 @@ import moment from 'moment';
 import 'moment/locale/ru';
 
 export default class CalendarItem extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleClick(event) {
         event.stopPropagation();
         this.props.onClick(this.props.date);

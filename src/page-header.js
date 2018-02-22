@@ -1,10 +1,6 @@
 import React from "react";
 
 export default class PageHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     showSearchResults() {
         const resultsBlock = document.getElementById("search-results");
         if (!resultsBlock) {

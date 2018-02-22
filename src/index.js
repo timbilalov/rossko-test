@@ -172,7 +172,7 @@ class App extends React.Component {
                 break;
 
             case "edit":
-                events.map(function(elem) {
+                events.forEach(function(elem) {
                     if (elem.date === selectedDate) {
                         elem.name = evName;
                         elem.date = evDate;
@@ -181,7 +181,7 @@ class App extends React.Component {
                 break;
 
             case "delete":
-                events.map(function(elem) {
+                events.forEach(function(elem) {
                     if (elem.date === evDate) {
                         elem.name = evName;
                     }
