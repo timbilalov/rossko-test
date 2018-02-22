@@ -41,8 +41,7 @@ export default class PageHeader extends React.Component {
                 <div className="l-container">
                     <div className="page-header__inner">
                         <div className="page-header__controls">
-                            <button>Добавить</button>
-                            <button>Обновить</button>
+                            <button className="btn">Добавить</button>
                         </div>
 
                         <div className="page-header__search">

@@ -34,6 +34,7 @@ body, html {
     outline: 1px solid #ccc;
     position: relative;
     font-size: 0.9em;
+    cursor: pointer;
 }
 
 .calendar-item--option {
@@ -119,6 +120,17 @@ body, html {
     display: block;
     width: 100%;
     margin: 1rem 0;
+    box-sizing: border-box;
+}
+
+.event-popup input:first-child,
+.event-popup textarea:first-child {
+    margin-top: 0;
+}
+
+.event-popup input:last-child,
+.event-popup textarea:last-child {
+    margin-bottom: 0;
 }
 
 .calendar-item .event-popup {
@@ -162,11 +174,12 @@ body, html {
 }
 
 .event-popup__text {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 textarea {
     resize: vertical;
+    min-height: 3rem;
 }
 
 .page-header__search {
@@ -176,10 +189,13 @@ textarea {
 .page-header__s-results {
     display: none;
     position: absolute;
+    z-index: 2;
     left: 0;
     top: 100%;
     margin-top: 1rem;
     width: 100%;
+    max-height: 10rem;
+    overflow: auto;
 }
 
 .page-header__s-res-item {
@@ -198,4 +214,39 @@ textarea {
 .page-header__s-res-date {
     font-size: 0.8em;
     color: #ccc;
+}
+
+.btn {
+    margin-right: 0.5rem;
+}
+
+.btn:last-child {
+    margin-right: 0;
+}
+
+.event-popup__close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #fff;
+    border: 0;
+    outline: 0;
+    padding: 1rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.page-header__controls {
+    position: relative;
+}
+
+.page-header__controls .event-popup {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 1rem;
+}
+
+.event-popup__inputs input:first-child {
+    width: calc(100% - 2rem);
 }
