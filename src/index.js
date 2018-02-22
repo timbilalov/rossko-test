@@ -27,6 +27,7 @@ class App extends React.Component {
                 isSingleString: false,
                 singleString: ""
             },
+            defaultEventName: "Событие без названия",
             events: [],
             searchValue: "",
             searchResult: []
@@ -131,13 +132,13 @@ class App extends React.Component {
         let evName, evDate, evDescription, selectedDate;
 
         if (!this.state.event.isSingleString) {
-            evName = props.name || this.state.event.name;
+            evName = props.name || this.state.event.name || this.state.defaultEventName;
             evDate = props.date || this.state.event.date;
             evDescription = props.description || this.state.event.description;
             selectedDate = this.state.event.selectedDate;
 
         } else {
-            const singleString = this.state.event.singleString || "Событие без названия";
+            const singleString = this.state.event.singleString || this.state.defaultEventName;
             const arr = singleString.split(",");
 
             if (arr.length < 2) {
@@ -297,6 +298,27 @@ class App extends React.Component {
         });
     }
 
+    clearAll() {
+        const context = this;
+        const f = function() {
+            context.closeEventPopup();
+            const allGridItems = document.querySelectorAll(".calendar-item");
+            const selectedClass = "calendar-item--selected";
+            Array.prototype.forEach.call(allGridItems, function(elem) {
+                elem.classList.remove(selectedClass);
+            });
+        };
+
+        const events = [];
+        this.setState({
+            events: events
+        }, f);
+
+        if (localStorage) {
+            localStorage.setItem("events", JSON.stringify(events));
+        }
+    }
+
     render() {
         const viewDate = moment().add(this.state.view.month - this.state.current.month, "months").format("MMMM, YYYY");
         const currentDate = moment().format("YYYY.MM.DD");
@@ -314,6 +336,10 @@ class App extends React.Component {
                     </div>
 
                     <CalendarGrid month={ this.state.view.month } currentDate={ currentDate } onClick={ (date) => this.handleClick(date) } events={ this.state.events } />
+
+                    <button onClick={ () => this.clearAll() }>Удалить все события и очистить localStorage</button>
+                    <br/>
+                    <br/>
                 </div>
 
                 <div className="event-popup" id="event-popup">
